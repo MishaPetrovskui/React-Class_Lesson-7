@@ -196,6 +196,7 @@ function RegisterForm() {
   const [errors, setErrors] = useState({});
   const activeUser = localStorage.getItem("activeUser");
   const navigate = useNavigate();
+  const [searchParam] = useSearchParams();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -218,39 +219,91 @@ function RegisterForm() {
     setErrors(newerror);
     if (Object.keys(newerror).length === 0) alert("Помилок нема");
   }
-
-  return (
-    <div className="backgroungRegister">
-      {}
-      <form onSubmit={handleSubmit}>
-        <div className="REGISTERBackground">
-          <h1>REGISTER</h1>
-        </div>
-        <div className="main">
-          <div>
-            <p>Ім'я</p>
-            <input
-              type="text"
-              name="name"
-              //placeholder="Ім'я"
-              value={formData.name}
-              onChange={handleChange}
-              className={errors.name ? "error" : ""}
-            />
-            {errors.name && <span className="error">{errors.name}</span>}
+  if (
+    localStorage.getItem("activeUser") === undefined ||
+    localStorage.getItem("activeUser") == null ||
+    localStorage.getItem("activeUser") == ""
+  ) {
+    return (
+      <div className="backgroungRegister">
+        <form
+          // onSubmit={() => {
+          //   handleSubmit;
+          //   localStorage.setItem("activeUser", formData.name);
+          // }}
+          onSubmit={handleSubmit}
+        >
+          <div className="REGISTERBackground">
+            <h1>REGISTER</h1>
           </div>
-          <button
-            type="Submit"
-            onClick={() => {
-              localStorage.setItem("activeUser", formData.name);
-              //navigate("/");
-            }}
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="main">
+            <div>
+              <p>Ім'я</p>
+              <input
+                type="text"
+                name="name"
+                //placeholder="Ім'я"
+                value={formData.name}
+                onChange={handleChange}
+                className={errors.name ? "error" : ""}
+              />
+              {errors.name && <span className="error">{errors.name}</span>}
+            </div>
+            <button
+              type="Submit"
+              onClick={() => {
+                localStorage.setItem("activeUser", formData.name);
+                //navigate(searchParam.get("/register"));
+              }}
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  } else {
+    return (
+      <div className="backgroungRegister">
+        <form
+          // onSubmit={() => {
+          //   handleSubmit;
+          //   localStorage.clear();
+          // }}
+          onSubmit={() => handleSubmit}
+        >
+          <div className="REGISTERBackground">
+            <h1>Log Out</h1>
+          </div>
+          <div className="main">
+            <div>
+              <p>LogOut from "{localStorage.getItem("activeUser")}"?</p>
+            </div>
+            <button
+              type="Submit"
+              onClick={() => {
+                localStorage.setItem("activeUser", formData.name);
+                //navigate(searchParam.get("/register"));
+              }}
+            >
+              LogOut
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+}
+
+function Name() {
+  return (
+    <span>
+      {localStorage.getItem("activeUser") === undefined ||
+      localStorage.getItem("activeUser") == null ||
+      localStorage.getItem("activeUser") == ""
+        ? "None"
+        : localStorage.getItem("activeUser")}
+    </span>
   );
 }
 
@@ -281,10 +334,10 @@ export default function App() {
             >
               ВСІ КАРТИНИ
             </NavLink>
+            <NavLink to="register">
+              <Name />
+            </NavLink>
           </div>
-          <Link class="form__btn" type="button" to="register">
-            register
-          </Link>
         </nav>
         <Routes>
           <Route path="bio" element={<Biography />} />
