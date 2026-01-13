@@ -6,6 +6,9 @@ import {
   Route,
   Link,
   NavLink,
+  useParams,
+  useNavigate,
+  useSearchParams,
 } from "react-router-dom";
 
 function Biography() {
@@ -183,41 +186,111 @@ function AllPictures() {
   );
 }
 
-export default function App() {
-  const [activePage, setActivePage] = useState("BIO");
+function RegisterForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    age: "",
+    gender: "",
+    email: "",
+  });
+  const [errors, setErrors] = useState({});
+  const activeUser = localStorage.getItem("activeUser");
+  const navigate = useNavigate();
 
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+  function validation() {
+    const newErrors = {};
+    if (formData.name.trim() === "") {
+      //setErrors((prev) => ({...prev, name: "Поле не може бути порожнім!"}));
+      newErrors.name = "Поле не може бути порожнім!";
+    }
+    return newErrors;
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newerror = validation();
+    setErrors(newerror);
+    if (Object.keys(newerror).length === 0) alert("Помилок нема");
+  }
+
+  return (
+    <div className="backgroungRegister">
+      {}
+      <form onSubmit={handleSubmit}>
+        <div className="REGISTERBackground">
+          <h1>REGISTER</h1>
+        </div>
+        <div className="main">
+          <div>
+            <p>Ім'я</p>
+            <input
+              type="text"
+              name="name"
+              //placeholder="Ім'я"
+              value={formData.name}
+              onChange={handleChange}
+              className={errors.name ? "error" : ""}
+            />
+            {errors.name && <span className="error">{errors.name}</span>}
+          </div>
+          <button
+            type="Submit"
+            onClick={() => {
+              localStorage.setItem("activeUser", formData.name);
+              //navigate("/");
+            }}
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default function App() {
   return (
     <>
       <Router>
         <nav>
           <div class="buttons">
-            <Link
+            <NavLink
               to="bio"
-              className={activePage === "BIO" ? "active" : ""}
-              onClick={() => setActivePage("BIO")}
+              // className={activePage === "BIO" ? "active" : ""}
+              // onClick={() => setActivePage("BIO")}
             >
               БІОГРАФІЯ
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="top"
-              className={activePage === "TOP" ? "active" : ""}
-              onClick={() => setActivePage("TOP")}
+              // className={activePage === "TOP" ? "active" : ""}
+              // onClick={() => setActivePage("TOP")}
             >
               НАЙВІДОМІША КАРТИНА
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="all"
-              className={activePage === "ALL" ? "active" : ""}
-              onClick={() => setActivePage("ALL")}
+              // className={activePage === "ALL" ? "active" : ""}
+              // onClick={() => setActivePage("ALL")}
             >
               ВСІ КАРТИНИ
-            </Link>
+            </NavLink>
           </div>
+          <Link class="form__btn" type="button" to="register">
+            register
+          </Link>
         </nav>
         <Routes>
           <Route path="bio" element={<Biography />} />
           <Route path="top" element={<MostFamousPicture />} />
           <Route path="all" element={<AllPictures />} />
+          <Route path="register" element={<RegisterForm />} />
         </Routes>
       </Router>
     </>
