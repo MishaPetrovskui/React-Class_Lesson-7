@@ -147,30 +147,28 @@ div .imag1 {
   transition: color 0.2s;
 }
 
-/* .buttons button:hover {
+.buttons button:hover {
   color: #333;
 }
 
-.buttons button.active {
+.active {
   color: #2196f3;
   font-weight: 500;
 }
 
-.buttons button.active::after {
+.active::after {
   content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
   right: 0;
   height: 2px;
-  background: #2196f3;
-} */
+}
 
 .form__btn {
   margin-top: 1.2em;
   margin-bottom: 2em;
   display: block;
-  width: 100%;
   background-color: #33a192;
   color: white;
   border: none;
